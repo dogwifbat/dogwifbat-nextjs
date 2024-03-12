@@ -31,3 +31,8 @@ body {
     text-wrap: balance;
   }
 }
+
+.container {
+  position: relative;
+  margin: auto;
+}
