@@ -10,7 +10,7 @@ export default function Home() {
 
         <h1 className="text-6xl font-bold mt-10 mb-4">What is $WIFB?</h1>
         <p className="text-2xl p-4">
-          Literally just a dog wif a bat that's ready to bonk bark up crypto, swing for moonshots, and bonk FUD.
+          Literally just a dog wif a bat that's ready to bark up crypto, swing for moonshots, and bonk FUD.
         </p>
         <p className="text-xl mb-5 p-2">Join the bonk! For the community by the community.</p>
         <div className="m-10">
