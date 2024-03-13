@@ -23,7 +23,6 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <ThemeModeScript />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>
       <body className={inter.className}>
         <Flowbite>
