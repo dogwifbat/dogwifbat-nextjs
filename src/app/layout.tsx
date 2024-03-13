@@ -23,6 +23,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <ThemeModeScript />
+        <link rel="icon" href="/WIFB.png" sizes="any" />
       </head>
       <body className={inter.className}>
         <Flowbite>
