@@ -31,7 +31,7 @@ export default function About() {
 
         <p className="text-xl font-bold mb-2">Roadmap</p>
         <p className='mb-12'>
-          Our roadmap includes an upcoming token scanner tool, NFTs, and a gamified dApp, enhancing the the $ALPH ecosystem and allowing YOU to DYOR on tokens, and prevent YOU from being rugged.
+          Our roadmap includes an upcoming token scanner tool, NFTs, and a gamified dApp, enhancing the $ALPH ecosystem and allowing YOU to DYOR on tokens, and prevent YOU from being rugged.
         </p>
 
         <p className="text-md mb-4">LP Tokens are locked until 1/1/2025.</p>
