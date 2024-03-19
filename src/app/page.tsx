@@ -10,17 +10,14 @@ export default function Home() {
 
         <h1 className="text-6xl font-bold mt-10 mb-4">What is $WIFB?</h1>
         <p className="text-2xl p-4">
-          Literally just a dog wif a bat that's ready to bark up crypto, swing for moonshots, and bonk FUD.
+          Bonks Rugs, Gibs Lubs
         </p>
-        <p className="text-xl mb-5 p-2">Join the bonk! For the community by the community.</p>
+        <Link href="/about" className="bg-gray-50 text-black font-bold py-2 px-4 rounded hover:bg-gray-300 transition-colors duration-300" >
+          But fr, what is $WIFB?
+        </Link>
         <div className="m-10">
-          {/* Image of the dog with a hat */}
           <Image src="/WIFB.png" alt="dogwifbat" width={400} height={400} className="inline-block" />
         </div>
-        
-        <Link href="https://www.ayin.app/swap" className="bg-gray-50 text-black font-bold py-2 px-4 rounded hover:bg-gray-300 transition-colors duration-300">
-          Trade $WIFB on Ayin!
-        </Link>
 
     </div>
   );

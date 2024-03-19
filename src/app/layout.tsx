@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Link from 'next/link';
-import { DarkThemeToggle, Navbar, NavbarBrand, NavbarCollapse, NavbarLink, NavbarToggle, Flowbite, ThemeModeScript  } from 'flowbite-react';
-import Image from "next/image";
+import React from "react";
 
-import { BsTwitterX } from "react-icons/bs";
+import {Providers} from "./providers";
+import Navbar from "./components/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,44 +18,31 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+
+
   return (
-    <html lang="en">
+    <html lang="en" className='dark'>
+
       <head>
-        <ThemeModeScript />
         <link rel="icon" href="/WIFB.ico" sizes="any" />
       </head>
+
       <body className={inter.className}>
-        <Flowbite>
-          <Navbar fluid rounded>
-            <NavbarBrand>
-              <Image src="/WIFB.png" width={40} height={40} className="mr-3 h-6 sm:h-9" alt="dogwifbat" />
-              <div className="text-3xl font-bold text-black">dogwifbat $WIFB</div>
-            </NavbarBrand>
-            <NavbarToggle />
-            <NavbarCollapse>
 
-              <NavbarLink as={Link} href="/">
-                Home
-              </NavbarLink>
-              <NavbarLink as={Link} href="about">
-                About
-              </NavbarLink>
-              <NavbarLink as={Link} href="https://mobula.io/pair/2ARBQ8p8sPu1jcUkDgpBrWZT3PXxUUdwQEacxjciCULgw" active>
-                Charts
-              </NavbarLink>
+        <Providers>
 
-              <NavbarLink as={Link} href="https://twitter.com/dogwifbatt">
-                <BsTwitterX />
-              </NavbarLink>
-              
-            </NavbarCollapse>
+          <Navbar>
           </Navbar>
-          <main className="bg-black text-white">
+
+          <main>
             {children}
           </main>
-          
-        </Flowbite>
+
+        </Providers>
+
       </body>
+
     </html>
   );
 }
