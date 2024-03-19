@@ -9,13 +9,15 @@ export default function App() {
 
     return (
         <Navbar isBordered>
-
-            <NavbarContent justify="left">
-
-                <NavbarBrand>
-                    <Image src="/WIFB.png" width={50} height={50} className="m-3" alt="dogwifbat" />
-                    <div className="text-2xl font-bold">dogwifbat</div>
+          
+          <NavbarContent justify="left">
+            <NavbarBrand>
+                    <Image src="/WIFB.png" width={50} height={50} alt="dogwifbat" />
+                    <div className=" m-2 text-2xl font-bold">dogwifbat</div>
                 </NavbarBrand>
+          </NavbarContent>
+
+            <NavbarContent justify="end">
 
               <NavbarItem>
                 <Link color="foreground" href="/">
