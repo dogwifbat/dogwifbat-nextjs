@@ -26,7 +26,7 @@ export default function About() {
         </Link>
 
         <p className="text-md mt-4 mb-6">
-          The idea and ethos behind dogwifbat was created due to a constant ruggers coming to the Alephium blockchain. dogwifbat is designed to combat rug pulls. With our mascot, dogwifbat, we aim to provide transparency into newly listed tokens and DEX pools on Ayin.
+          The idea and ethos behind dogwifbat was created due to an influx of rug pulls coming to the Alephium blockchain. dogwifbat is designed to combat rug pulls. With our mascot, dogwifbat, we aim to provide transparency into newly listed tokens and DEX pools on Ayin.
         </p>
 
         <p className="text-xl font-bold mb-2">Roadmap</p>

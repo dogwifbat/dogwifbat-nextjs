@@ -1,7 +1,7 @@
 'use client'
 
 import React from "react";
-import {Navbar, NavbarBrand, NavbarContent, NavbarItem, NavbarMenuToggle, NavbarMenu, NavbarMenuItem, Link, Button} from "@nextui-org/react";
+import {Navbar, NavbarBrand, NavbarContent, NavbarItem, Link} from "@nextui-org/react";
 import Image from "next/image";
 import { BsTwitterX, BsDiscord  } from "react-icons/bs";
 
@@ -34,6 +34,12 @@ export default function App() {
               <NavbarItem>
                 <Link color="foreground" href="https://mobula.io/pair/2ARBQ8p8sPu1jcUkDgpBrWZT3PXxUUdwQEacxjciCULgw">
                   Charts
+                </Link>
+              </NavbarItem>
+
+              <NavbarItem>
+                <Link color="foreground" href="/rugsniffer">
+                  RugSniffer
                 </Link>
               </NavbarItem>
             </NavbarContent>
