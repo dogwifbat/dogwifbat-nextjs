@@ -10,7 +10,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "dogwifbat",
-  description: "Barking up crypto, swinging for moonshots, bonking FUD. Join the bonk! For the community by the community."
+  description: "Bonks Rugs, Gibs Lubs."
 };
 
 export default function RootLayout({
