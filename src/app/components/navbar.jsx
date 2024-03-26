@@ -10,7 +10,7 @@ export default function App() {
     return (
         <Navbar isBordered>
           
-          <NavbarContent justify="left">
+          <NavbarContent>
             <NavbarBrand>
                     <Image src="/WIFB.png" width={50} height={50} alt="dogwifbat" />
                     <div className=" m-2 text-2xl font-bold">dogwifbat</div>
@@ -27,7 +27,7 @@ export default function App() {
               
               <NavbarItem>
                 <Link color="foreground" href="/about">
-                  About
+                  Tokenomics
                 </Link>
               </NavbarItem>
 
@@ -40,6 +40,12 @@ export default function App() {
               <NavbarItem>
                 <Link color="foreground" href="/rugsniffer">
                   RugSniffer
+                </Link>
+              </NavbarItem>
+
+              <NavbarItem>
+                <Link color="foreground" href="/socials">
+                  Socials
                 </Link>
               </NavbarItem>
             </NavbarContent>

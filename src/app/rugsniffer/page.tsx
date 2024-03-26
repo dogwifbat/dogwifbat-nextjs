@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Image} from "@nextui-org/react";
+import { Image } from "@nextui-org/react";
 import { subtitle, title } from "@/app/components/primitives"
 
 export default function Home() {

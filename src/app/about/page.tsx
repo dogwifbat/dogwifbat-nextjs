@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
-import { Button, Card, Spacer, Link as NextLink } from '@nextui-org/react';
 import PieChart from '@/components/piechart';
 import Link from 'next/link';
 
