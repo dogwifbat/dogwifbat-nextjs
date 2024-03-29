@@ -31,13 +31,13 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-start">
           <h1 className="text-6xl font-bold mt-10 mb-4">NFTs</h1>
           <p className="text-2xl p-4 max-w-5xl">
-            Coming soon...
+            Coming soon ...
           </p>
           <Link href="/" className="bg-gray-50 text-black font-bold py-2 px-4 rounded hover:bg-gray-300 transition-colors duration-300" >
-            Coming soon!
+            Coming soon
           </Link>
         </div>
       </div>
