@@ -1,5 +1,6 @@
 services:
-  app:
+  wifb-server:
+    container_name: wifb_server
     image: dogwifbat-website
     build:
       context: ./
@@ -11,3 +12,10 @@ services:
         - /app/.next
     ports:
       - "3000:3000"
+
+    networks:
+      - caddy_caddy-network
+
+networks:
+  caddy_caddy-network:
+    external: true
