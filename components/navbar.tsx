@@ -17,7 +17,7 @@ export default function App() {
                 </NavbarBrand>
           </NavbarContent>
 
-            <NavbarContent justify="end">
+            <NavbarContent justify="end" className="text-white font-semibold">
 
               <NavbarItem>
                 <Link color="foreground" href="/">
