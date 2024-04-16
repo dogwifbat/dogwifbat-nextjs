@@ -59,13 +59,12 @@ const TokenInfo: React.FC<myProps> = ({tokenID}) => {
 
   // If error, render the error in component
   if (error) {
-    // return <div>Error: {error.message}</div>;
     return (
       <div className='grid grid-row-4 text-right lg:text-justify row-span-3'>
-          <div><Spinner/></div>
-          <div><Spinner/></div>
-          <div><Spinner/></div>
-          <div><Spinner/></div>
+          <div>N/A</div>
+          <div>N/A</div>
+          <div>N/A</div>
+          <div>N/A</div>
       </div>
   );
   }

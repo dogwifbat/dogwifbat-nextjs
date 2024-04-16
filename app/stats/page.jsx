@@ -30,7 +30,7 @@ export default function StatsPage() {
 					
 				</div>
 				<div className='col-span-3 flex font-mono justify-end items-center uppercase text-5xl ml-5'>
-					<span>$ A milli</span>
+					<span>$1,000,000</span>
 				</div>
 			</div>
 
