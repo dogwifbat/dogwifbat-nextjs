@@ -12,39 +12,51 @@ export default function App() {
           
           <NavbarContent>
             <NavbarBrand>
-                    <Image src="/WIFB.png" width={50} height={50} alt="dogwifbat" />
-                    <div className=" m-2 text-2xl font-bold">dogwifbat</div>
-                </NavbarBrand>
+              <Image src="/WIFB.png" width={50} height={50} alt="dogwifbat" />
+              <div className="m-2 text-3xl font-bold">dogwifbat</div>
+            </NavbarBrand>
           </NavbarContent>
 
             <NavbarContent justify="end" className="text-white font-semibold">
 
               <NavbarItem>
-                <Link color="foreground" href="/">
+                <Link color="foreground" href="/" className="text-lg">
                   Home
                 </Link>
               </NavbarItem>
               
               <NavbarItem>
-                <Link color="foreground" href="/about">
+                <Link color="foreground" href="/tokenomics" className="text-lg">
                   Tokenomics
                 </Link>
               </NavbarItem>
 
               <NavbarItem>
-                <Link color="foreground" href="https://mobula.io/pair/2ARBQ8p8sPu1jcUkDgpBrWZT3PXxUUdwQEacxjciCULgw">
+                <Link color="foreground" href="https://mobula.io/pair/2ARBQ8p8sPu1jcUkDgpBrWZT3PXxUUdwQEacxjciCULgw" isExternal className="text-lg">
                   Charts
                 </Link>
               </NavbarItem>
 
               <NavbarItem>
-                <Link color="foreground" href="/rugsniffer">
+                <Link color="foreground" href="https://ayin.app/swap" isExternal className="text-lg">
+                  Buy
+                </Link>
+              </NavbarItem>
+
+              <NavbarItem>
+                <Link color="foreground" href="/rugsniffer" className="text-lg">
                   RugSniffer
                 </Link>
               </NavbarItem>
 
               <NavbarItem>
-                <Link color="foreground" href="/socials">
+                <Link color="foreground" href="/nfts" className="text-lg">
+                  NFT
+                </Link>
+              </NavbarItem>
+
+              <NavbarItem>
+                <Link color="foreground" href="/socials" className="text-lg">
                   Socials
                 </Link>
               </NavbarItem>

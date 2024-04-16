@@ -1,16 +1,13 @@
 import "@/styles/globals.css";
 import { Metadata } from "next";
 import { Providers } from "./providers";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/ui/navbar";
 import clsx from "clsx";
+import DonatorScrollbar from "@/components/donator_scroller";
 
 export const metadata: Metadata = {
 	title: "dogwifbat",
 	description: "Bonks Rugs, Gibs Lubs.",
-	themeColor: [
-		{ media: "(prefers-color-scheme: light)", color: "white" },
-		{ media: "(prefers-color-scheme: dark)", color: "black" },
-	],
 	icons: {
 		icon: "/WIFB.ico",
 		shortcut: "/WIFB.png",
@@ -33,7 +30,8 @@ export default function RootLayout({
 				<Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
 					<div className="relative flex flex-col h-screen">
 						<Navbar />
-						<main className="container mx-auto max-w-11/12 pt-8 px-6 flex-grow">
+						<DonatorScrollbar text="Top Donors: 1. $DRAGON   2. $NGU   3. $ART" />
+						<main className="container mx-auto max-w-11/12 px-6 flex-grow">
 							{children}
 						</main>
 					</div>

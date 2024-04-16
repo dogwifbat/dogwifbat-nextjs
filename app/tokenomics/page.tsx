@@ -3,7 +3,7 @@ import React from 'react';
 import PieChart from '@/components/piechart';
 import Link from 'next/link';
 
-export default function About() {
+export default function tokenomics() {
   return (
     <div className="flex items-center justify-center">
       <div className=" shadow-xl rounded-lg max-w-4xl mx-auto text-center">
