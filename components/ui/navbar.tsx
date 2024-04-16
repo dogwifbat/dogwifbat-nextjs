@@ -12,11 +12,11 @@ export default function App() {
   const menuItems = {
     "Home": "/",
     "Tokenomics": "/tokenomics",
-    "Charts": "/",
-    "Buy": "/",
-    "RugSniffer": "/",
-    "NFT": "/",
-    "Social": "/"
+    "Charts": "https://mobula.io/pair/2ARBQ8p8sPu1jcUkDgpBrWZT3PXxUUdwQEacxjciCULgw",
+    "Buy": "https://ayin.app/swap",
+    "RugSniffer": "/rugsniffer",
+    "NFT": "/nfts",
+    "Social": "/socials"
   };
 
     return (

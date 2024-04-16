@@ -3,6 +3,7 @@ import { useSearchParams } from "next/navigation";
 import { Image, Progress, Button } from "@nextui-org/react";
 import { BatIcon, HeartFilledIcon } from '@/components/icons';
 import TokenInfo from "@/components/ui/tokenInfo";
+import TopHolders from "@/components/ui/topHolders";
 
 export default function StatsPage() {
 	const tokenID = useSearchParams().get('tokenID');
@@ -23,7 +24,7 @@ export default function StatsPage() {
 							/>
 					</div>
 					<div className='flex font-mono justify-start items-center uppercase text-5xl ml-5 col-span-5'>
-						<span>Token Name</span>
+						<span>dogwifbat</span>
 					</div>
 				</div>
 				<div className='col-span-2 items-center justify-center flex'>
@@ -66,7 +67,7 @@ export default function StatsPage() {
 						</div>
 					</div>
 					<div className='grid grid-rows-5 h-[80%] text-lg'>
-					
+						<TopHolders tokenID={tokenID} />
 					</div>
 				</div>
 

@@ -30,7 +30,7 @@ export default function RootLayout({
 				<Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
 					<div className="relative flex flex-col h-screen">
 						<Navbar />
-						<DonatorScrollbar text="Top Donors: 1. $DRAGON   2. $NGU   3. $ART" />
+						<DonatorScrollbar text="Top Donors: 1. $NGU   2. $D3lta19   3. $DRAGON" />
 						<main className="container mx-auto max-w-11/12 px-6 flex-grow">
 							{children}
 						</main>

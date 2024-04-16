@@ -25,8 +25,8 @@ const TokenInfo: React.FC<myProps> = ({tokenID}) => {
         // Perform requests simultaneously using Promise.all
         const [tokenMetadataResponse, tokenSupplyResponse, tokenCreatorResponse, mcapResponse] = await Promise.all([
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/metadata`),
-          fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/maxSupply`),
-          fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/creator`),
+          fetch(`https://sniffer-backend.dogwifbat.org/tokens/${contractID}/maxsupply`),
+          fetch(`https://sniffer-backend.dogwifbat.org/tokens/${contractID}/creator`),
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/marketcap`),
         ]);
 
