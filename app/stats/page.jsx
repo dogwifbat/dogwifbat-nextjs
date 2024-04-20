@@ -4,6 +4,8 @@ import { Image, Progress, Button } from "@nextui-org/react";
 import { BatIcon, HeartFilledIcon } from '@/components/icons';
 import TokenInfo from "@/components/ui/tokenInfo";
 import TopHolders from "@/components/ui/topHolders";
+import Liquidity_Pools from "@/components/ui/liquidityPools";
+import TopBar from "@/components/ui/topBar";
 
 export default function StatsPage() {
 	const tokenID = useSearchParams().get('tokenID');
@@ -14,26 +16,7 @@ export default function StatsPage() {
 	return (
 		<section className='relative'>
 
-			<div className='grid grid-cols-8 h-full gap-4'>
-				<div className='grid col-span-3 grid-cols-6 gap-1'>
-					<div className='col-span-1 flex justify-start items-center'>
-						<Image
-							isBlurred
-							width={100}
-							src="https://raw.githubusercontent.com/alephium/token-list/master/logos/WIFB.png"
-							/>
-					</div>
-					<div className='flex font-mono justify-start items-center uppercase text-5xl ml-5 col-span-5'>
-						<span>dogwifbat</span>
-					</div>
-				</div>
-				<div className='col-span-2 items-center justify-center flex'>
-					
-				</div>
-				<div className='col-span-3 flex font-mono justify-end items-center uppercase text-5xl ml-5'>
-					<span>$1,000,000</span>
-				</div>
-			</div>
+			<TopBar tokenID={tokenID}/>
 
 			<div className='grid grid-cols-1 lg:grid-cols-3 gap-8 py-4'>
 				<div className='grid grid-cols-2 grid-rows-4 font-mono p-2 text-2xl border-solid border-2 border-white-500 h-80'>
@@ -75,8 +58,16 @@ export default function StatsPage() {
 
 			<div className='grid grid-cols-1 lg:grid-cols-3 gap-8 py-4'>
 
-				<div className='grid grid-cols-6 grid-rows-5 lg:col-span-2 font-mono p-2 text-2xl border-solid border-2 border-white-500 h-60'>
+				<div className='grid grid-cols-6 lg:col-span-2 font-mono p-2 text-2xl border-solid border-2 border-white-500 h-60'>
 					<div className='col-span-6 text-3xl'><h1>Liquidity pools</h1></div>
+					<div className="col-span-1 text-2xl">Address</div>
+					<div className="col-span-1 text-2xl">Pair</div>
+					<div className="col-span-1 text-2xl">Initial LP</div>
+					<div className="col-span-1 text-2xl">LP Holders</div>
+					<div className="col-span-1 text-2xl">Liquidity</div>
+					<div className="col-span-1 text-2xl">LP Locked</div>
+
+					<Liquidity_Pools tokenID={tokenID} />
 				</div>
 
 				<div className='grid grid-col-2 col-span-1 gap-4 p-4 font-mono text-2xl border-solid border-2 border-white-500 h-60'>

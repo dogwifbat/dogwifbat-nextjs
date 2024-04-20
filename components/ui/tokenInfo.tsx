@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { addressFromContractId } from "@alephium/web3";
-import { formatSupply } from '@/app/utils/utils';
+import { formatPrice, formatSupply } from '@/app/utils/utils';
 import { Link, Spinner, Tooltip } from '@nextui-org/react';
 
 interface myProps {
@@ -11,7 +11,8 @@ const TokenInfo: React.FC<myProps> = ({tokenID}) => {
     const [tokenMetadata, setTokenMetadata] = useState<any>(null);
     const [maxSupply, setMaxSupply] = useState<any>(null);
     const [tokenCreator, setTokenCreator] = useState<any>(null);
-    const [marketCap, setMarketCap] = useState<any>(null);
+    const [tokenAlphPrice, setTokenAlphPrice] = useState<any>(null);
+    const [alphPrice, setAlphPrice] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
 
@@ -23,15 +24,16 @@ const TokenInfo: React.FC<myProps> = ({tokenID}) => {
     const fetchData = async () => {
       try {        
         // Perform requests simultaneously using Promise.all
-        const [tokenMetadataResponse, tokenSupplyResponse, tokenCreatorResponse, mcapResponse] = await Promise.all([
+        const [tokenMetadataResponse, tokenSupplyResponse, tokenCreatorResponse, tokenAlphPriceResponse, alphPriceResponse] = await Promise.all([
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/metadata`),
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${contractID}/maxsupply`),
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${contractID}/creator`),
-          fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/marketcap`),
+          fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/tokenpricealph`),
+          fetch(`https://api.coingecko.com/api/v3/simple/price?ids=alephium&vs_currencies=usd`),
         ]);
 
         // Check if both requests are successful
-        if (!tokenMetadataResponse.ok || !tokenSupplyResponse.ok || !tokenCreatorResponse.ok || !mcapResponse.ok) {
+        if (!tokenMetadataResponse.ok || !tokenSupplyResponse.ok || !tokenCreatorResponse.ok || !tokenAlphPriceResponse.ok || !alphPriceResponse.ok) {
           throw new Error('Failed to fetch data');
         }
 
@@ -39,13 +41,15 @@ const TokenInfo: React.FC<myProps> = ({tokenID}) => {
         const tokenMetadata = await tokenMetadataResponse.json();
         const maxSupply = await tokenSupplyResponse.json();
         const creator = await tokenCreatorResponse.json();
-        const mcap = await mcapResponse.json();
+        const tokenAlphPrice = await tokenAlphPriceResponse.json();
+        const alphPrice = await alphPriceResponse.json();
 
         // Once both requests are completed successfully, update state and set isLoading to false
         setTokenMetadata(tokenMetadata);
         setMaxSupply(maxSupply);
         setTokenCreator(creator);
-        setMarketCap(mcap);
+        setTokenAlphPrice(tokenAlphPrice);
+        setAlphPrice(alphPrice);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -84,7 +88,7 @@ const TokenInfo: React.FC<myProps> = ({tokenID}) => {
     // Once isLoading becomes false, you can render the fetched data or handle other logic
 
     // Get token decimals from metadata
-    const decimals = tokenMetadata['decimals'];
+    const decimals = tokenMetadata[0]['decimals'];
 
     // Format supply to be short supply format
     const short_supply = decimals > 0 ? formatSupply(maxSupply / Math.pow(10, decimals)) : formatSupply(maxSupply);
@@ -92,21 +96,28 @@ const TokenInfo: React.FC<myProps> = ({tokenID}) => {
     // Format creator address to be short format
     const short_creator = `${tokenCreator.slice(0, 4)}...${tokenCreator.slice(-4)}`;
 
+    const unformatted_mcap: string = (((tokenAlphPrice * alphPrice['alephium']['usd']) * maxSupply) / Math.pow(10, decimals)).toString();
+    let mcap
+    if (unformatted_mcap.indexOf('.') != -1) {
+      mcap = new Intl.NumberFormat('en-US').format((parseInt(unformatted_mcap.slice(0, unformatted_mcap.indexOf('.')))));
+    } else {
+      mcap = new Intl.NumberFormat('en-US').format(parseInt(unformatted_mcap));
+    }
 
   return (
     <div className='grid grid-row-4 text-right lg:text-justify row-span-3'>
         <div>
             <Tooltip color='default' content={tokenCreator}>
-                <Link className='underline' href={`https://explorer.alephium.org/addresses/${tokenCreator}`}>
+                <Link className='underline text-xl' color='foreground' isExternal href={`https://explorer.alephium.org/addresses/${tokenCreator}`}>
                     {short_creator}
                 </Link>
             </Tooltip>
         </div>
         <div><span>{short_supply}</span></div>
-        <div><span>${marketCap}</span></div>
+        <div><span>${mcap}</span></div>
         <div>
             <Tooltip color='default' content={contractID}>
-                <Link className='underline' href={`https://explorer.alephium.org/addresses/${contractID}`}>
+                <Link className='underline text-xl' color='foreground' isExternal href={`https://explorer.alephium.org/addresses/${contractID}`}>
                     {short_contractID}
                 </Link>
             </Tooltip>

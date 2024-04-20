@@ -21,7 +21,7 @@ const TopHolders: React.FC<myProps> = ({tokenID}) => {
       try {
         // Perform requests simultaneously using Promise.all
         const [tokenHoldersResponse, metadataResponse, maxsupplyResponse] = await Promise.all([
-          fetch(`https://sniffer-backend.dogwifbat.org/tokens/tokens/${tokenID}/holders`),
+          fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/holders`),
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/metadata`),
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${contractID}/maxsupply`),
         ]);
@@ -72,7 +72,7 @@ const TopHolders: React.FC<myProps> = ({tokenID}) => {
     // Once isLoading becomes false, you can render the fetched data or handle other logic
 
     // Get token decimals from metadata
-    const decimals = metadata['decimals'];
+    const decimals = metadata[0]['decimals'];
 
     // Step 1: Convert object to array of objects
     // key: address
@@ -90,21 +90,13 @@ const TopHolders: React.FC<myProps> = ({tokenID}) => {
     // Step 3: Slice the first 5 elements
     const top5 = dataArray.slice(0, 5);
 
-    // Step 4: Convert sliced array back to object
-    // const result = top5.reduce((acc, cur) => {
-    // acc[cur.key] = { item1: cur.item1, item2: cur.item2 };
-    // return acc;
-    // }, {});
-
-
-
   return (
     top5.map((holder: any) => (
         <div className='grid grid-cols-6'>
             <div className='col-span-2'>
                 <Tooltip color='default' content={holder.key}>
-                    <Link className='underline' href={`https://explorer.alephium.org/addresses/${holder.key}`}>
-                        {holder.key === 0 ? 'POOL' : `${holder.key.slice(0, 4)}...${holder.key.slice(-4)}`}
+                    <Link className='underline text-xl' color='foreground' isExternal href={`https://explorer.alephium.org/addresses/${holder.key}`}>
+                        {`${holder.key.slice(0, 4)}...${holder.key.slice(-4)}`}
                     </Link>
                 </Tooltip>
             </div>
