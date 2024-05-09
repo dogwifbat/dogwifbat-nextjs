@@ -7,10 +7,22 @@ interface myProps {
     tokenID: string;
 }
 
+interface Token {
+  name: string;
+  id: string;
+}
+
+interface LpPoolData {
+  LpToken: Token;
+  TokenA: Token;
+  TokenB: Token;
+}
+
 const TopHolders: React.FC<myProps> = ({tokenID}) => {
     const [tokenHolders, setTokenHolders] = useState<any>(null);
     const [metadata, setMetadata] = useState<any>(null);
     const [maxSupply, setMaxsupply] = useState<any>(null);
+    const [poolAddresses, setPoolAddresses] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
 
@@ -20,14 +32,15 @@ const TopHolders: React.FC<myProps> = ({tokenID}) => {
     const fetchData = async () => {
       try {
         // Perform requests simultaneously using Promise.all
-        const [tokenHoldersResponse, metadataResponse, maxsupplyResponse] = await Promise.all([
+        const [tokenHoldersResponse, metadataResponse, maxsupplyResponse, lpPoolDataResponse] = await Promise.all([
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/holders`),
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/metadata`),
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${contractID}/maxsupply`),
+          fetch(`https://sniffer-backend.dogwifbat.org/pools/GetLpTokens/${tokenID}`)
         ]);
 
         // Check if both requests are successful
-        if (!tokenHoldersResponse.ok || !metadataResponse || !maxsupplyResponse) {
+        if (!tokenHoldersResponse.ok || !metadataResponse || !maxsupplyResponse || !lpPoolDataResponse.ok) {
           throw new Error('Failed to fetch data');
         }
 
@@ -35,11 +48,19 @@ const TopHolders: React.FC<myProps> = ({tokenID}) => {
         const tokenHolders = await tokenHoldersResponse.json();
         const metadata = await metadataResponse.json();
         const maxSupply = await maxsupplyResponse.json();
+        const lpPoolData = await lpPoolDataResponse.json();
 
-        // Once both requests are completed successfully, update state and set isLoading to false
+        let poolAddresses: string[] = [];
+
+        lpPoolData.map(async (element: LpPoolData) => {
+          poolAddresses.push(addressFromContractId(element.LpToken.id));
+        });
+
+        // Once requests are completed successfully, update state and set isLoading to false
         setTokenHolders(tokenHolders);
         setMetadata(metadata);
         setMaxsupply(maxSupply);
+        setPoolAddresses(poolAddresses);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -72,7 +93,7 @@ const TopHolders: React.FC<myProps> = ({tokenID}) => {
     // Once isLoading becomes false, you can render the fetched data or handle other logic
 
     // Get token decimals from metadata
-    const decimals = metadata[0]['decimals'];
+    const decimals = metadata.decimals;
 
     // Step 1: Convert object to array of objects
     // key: address
@@ -96,7 +117,7 @@ const TopHolders: React.FC<myProps> = ({tokenID}) => {
             <div className='col-span-2'>
                 <Tooltip color='default' content={holder.key}>
                     <Link className='underline text-xl' color='foreground' isExternal href={`https://explorer.alephium.org/addresses/${holder.key}`}>
-                        {`${holder.key.slice(0, 4)}...${holder.key.slice(-4)}`}
+                        {poolAddresses.some((addr: any) => addr === holder.key) ? `Ayin AMM` : `${holder.key.slice(0, 4)}...${holder.key.slice(-4)}`}
                     </Link>
                 </Tooltip>
             </div>
@@ -104,7 +125,7 @@ const TopHolders: React.FC<myProps> = ({tokenID}) => {
                 {decimals > 0 ? formatSupply((holder.item1) / Math.pow(10, decimals)) : formatSupply(holder.item1)}
             </div>
             <div className='col-span-2'>
-                {decimals > 0 ? ((holder.item1 / maxSupply) * 100).toFixed(2) : ((holder.item1 / maxSupply) * 100).toFixed(2)}%
+                {((holder.item1 / maxSupply) * 100).toFixed(2)}%
             </div>
         </div>
     ))

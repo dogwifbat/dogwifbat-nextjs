@@ -29,7 +29,7 @@ const TokenInfo: React.FC<myProps> = ({tokenID}) => {
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${contractID}/maxsupply`),
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${contractID}/creator`),
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/tokenpricealph`),
-          fetch(`https://api.coingecko.com/api/v3/simple/price?ids=alephium&vs_currencies=usd`),
+          fetch(`https://backend.mainnet.alephium.org/market/prices?currency=usd`,{method:"POST", body:JSON.stringify(['ALPH'])}),
         ]);
 
         // Check if both requests are successful
@@ -88,7 +88,7 @@ const TokenInfo: React.FC<myProps> = ({tokenID}) => {
     // Once isLoading becomes false, you can render the fetched data or handle other logic
 
     // Get token decimals from metadata
-    const decimals = tokenMetadata[0]['decimals'];
+    const decimals = tokenMetadata.decimals;
 
     // Format supply to be short supply format
     const short_supply = decimals > 0 ? formatSupply(maxSupply / Math.pow(10, decimals)) : formatSupply(maxSupply);
@@ -96,7 +96,7 @@ const TokenInfo: React.FC<myProps> = ({tokenID}) => {
     // Format creator address to be short format
     const short_creator = `${tokenCreator.slice(0, 4)}...${tokenCreator.slice(-4)}`;
 
-    const unformatted_mcap: string = (((tokenAlphPrice * alphPrice['alephium']['usd']) * maxSupply) / Math.pow(10, decimals)).toString();
+    const unformatted_mcap: string = (((tokenAlphPrice * alphPrice[0]) * maxSupply) / Math.pow(10, decimals)).toString();
     let mcap
     if (unformatted_mcap.indexOf('.') != -1) {
       mcap = new Intl.NumberFormat('en-US').format((parseInt(unformatted_mcap.slice(0, unformatted_mcap.indexOf('.')))));

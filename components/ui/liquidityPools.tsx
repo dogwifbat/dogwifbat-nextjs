@@ -40,16 +40,50 @@ const Liquidity_Pools: React.FC<myProps> = ({tokenID}) => {
         const fetchData = async () => {
           try {
             // Fetch lpPoolData
-            const lpPoolDataResponse = await fetch(`https://sniffer-backend.dogwifbat.org/pools/GetLpTokens/${tokenID}`);
-            if (!lpPoolDataResponse.ok) {
+            const [lpPoolDataResponse, alphUsdPriceResponse] = await Promise.all([
+                fetch(`https://sniffer-backend.dogwifbat.org/pools/GetLpTokens/${tokenID}`),
+                fetch(`https://backend.mainnet.alephium.org/market/prices?currency=usd`,{method:"POST", body:JSON.stringify(['ALPH'])}),
+            ]); 
+            if (!lpPoolDataResponse.ok || !alphUsdPriceResponse.ok) {
               throw new Error('Failed to fetch data');
             }
             const lpPoolData = await lpPoolDataResponse.json();
+            const alphUsdPrice = await alphUsdPriceResponse.json()
             setLpPoolData(lpPoolData);
     
             // Fetch additional data for each element in lpPoolData
             const updatedPoolData = await Promise.all(lpPoolData.map(async (element: LpPoolData) => {
                 const pool_address = addressFromContractId(element.LpToken.id);
+
+                let liquidity;
+
+                const liquidityResponse = await fetch(`https://sniffer-backend.dogwifbat.org/pools/${pool_address}/liquidity`);
+                if (!liquidityResponse.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                const liquidity_info = await liquidityResponse.json();
+
+                if(liquidity_info.poolType == 'token') {
+                    // Pool type is Token/Token
+                    const tokenPriceAlphResponse = await fetch(`https://sniffer-backend.dogwifbat.org/tokens/${liquidity_info.tokenA.tokenId}/tokenpricealph`);
+                    if (!tokenPriceAlphResponse.ok) {
+                        throw new Error('Failed to fetch data');
+                    }
+                    const tokenAlphPrice = await tokenPriceAlphResponse.json();
+                    const tokenBalance = liquidity_info.tokenA.adjustedBalance;
+
+                    liquidity = ((tokenAlphPrice * tokenBalance) * alphUsdPrice[0]).toString();
+                } else {
+                    // Pool type is ALPH/Token
+                    liquidity = (liquidity_info.alphBalance * alphUsdPrice[0]).toString();
+                };
+
+                if (liquidity.toString().indexOf('.') != -1) {
+                    liquidity = new Intl.NumberFormat('en-US').format((parseInt(liquidity.slice(0, liquidity.indexOf('.')))));
+                } else {
+                    liquidity = new Intl.NumberFormat('en-US').format(parseInt(liquidity));
+                }
+
                 const [initialLPResponse, LpHoldersResponse] = await Promise.all([
                   fetch(`https://sniffer-backend.dogwifbat.org/pools/GetLpProvider/${pool_address}`),
                   fetch(`https://sniffer-backend.dogwifbat.org/tokens/${element.LpToken.id}/holders`),
@@ -76,15 +110,12 @@ const Liquidity_Pools: React.FC<myProps> = ({tokenID}) => {
                     }
                 }
 
-                console.log("Total LP:", totalLP);
-                console.log("Locked LP:", lockedLP);
-
                 return {
                     ...element,
                     poolAddress: pool_address,
                     initialLP: initialLP,
                     lpHolders: lpHolders,
-                    liquidity: 0,
+                    liquidity: liquidity,
                     totalLP: totalLP,
                     lockedLP: lockedLP,
                 };
@@ -107,7 +138,7 @@ const Liquidity_Pools: React.FC<myProps> = ({tokenID}) => {
   if (error) {
     return (
       <div className='grid grid-row-4 text-right lg:text-justify row-span-3'>
-          <div>{error.message}</div>
+          <div className='grid row-span-4'>{error.message}</div>
       </div>
   );
   }
@@ -115,11 +146,13 @@ const Liquidity_Pools: React.FC<myProps> = ({tokenID}) => {
   // While isLoading is true, you can render a loading indicator or a placeholder
   if (isLoading) {
     return (
-        <div className='grid grid-row-4 text-right lg:text-justify row-span-3'>
+        <div className='grid grid-row-4 text-center lg:text-justify row-span-3'>
             <div><Spinner/></div>
         </div>
     );
   }
+
+
 
   return (
     lpPoolData.map((pool: LpPoolData) => (
@@ -147,7 +180,7 @@ const Liquidity_Pools: React.FC<myProps> = ({tokenID}) => {
         </div>
         <div className='grid'>
             <span className='w-full'>
-                <span>{Object.keys(pool.lpHolders).length}</span>
+                <span>{Object.keys(pool.lpHolders).length - 1}</span>
             </span>
         </div>
         <div className='grid'>
@@ -155,7 +188,21 @@ const Liquidity_Pools: React.FC<myProps> = ({tokenID}) => {
         </div>
         <div className='grid'>
             <div>
-                <span className={(pool.lockedLP / pool.totalLP) * 100 > 0 ? 'text-green-500' : 'text-red-500'}>{((pool.lockedLP / pool.totalLP) * 100).toFixed(0)}%</span>
+                <span className={
+                    ((pool.lockedLP / pool.totalLP) * 100) > 0 
+                    ?
+                    'text-green-500'
+                    :
+                    'text-red-500'}
+                >
+                    {
+                    (Object.keys(pool.lpHolders).length - 1) != 0
+                    ?
+                    ((pool.lockedLP / pool.totalLP) * 100).toFixed(0)
+                    :
+                    0
+                    }%
+                </span>
             </div>
         </div>
         </>

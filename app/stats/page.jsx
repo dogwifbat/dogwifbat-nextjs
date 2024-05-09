@@ -6,6 +6,7 @@ import TokenInfo from "@/components/ui/tokenInfo";
 import TopHolders from "@/components/ui/topHolders";
 import Liquidity_Pools from "@/components/ui/liquidityPools";
 import TopBar from "@/components/ui/topBar";
+import RiskAnalysis from "@/components/ui/risk";
 
 export default function StatsPage() {
 	const tokenID = useSearchParams().get('tokenID');
@@ -32,6 +33,7 @@ export default function StatsPage() {
 
 				<div className='grid font-mono p-2 text-2xl border-solid border-2 border-white-500 h-80'>
 					<div className='text-3xl'><h1>Risk analysis</h1></div>
+					<RiskAnalysis tokenID={tokenID} />
 				</div>
 
 				<div className='font-mono p-2 text-2xl border-solid border-2 border-white-500 h-80'>

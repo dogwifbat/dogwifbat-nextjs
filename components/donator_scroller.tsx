@@ -34,7 +34,7 @@ const DonatorScrollbar: React.FC<DonatorScrollbarProps> = ({ text, speed = 30 })
           transform: `translateX(100%)`, // Start from the right edge
         }}
       >
-        <div className="text-green-500 text-5xl" ref={textRef}>{text}</div>
+        <div className="text-amber-500 text-5xl" ref={textRef}>{text}</div>
       </div>
       <style jsx>{`
         @keyframes scrollText {

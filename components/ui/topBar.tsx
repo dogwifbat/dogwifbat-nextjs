@@ -27,7 +27,7 @@ const TopBar: React.FC<myProps> = ({tokenID}) => {
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/metadata`),
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/tokenimage`),
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/tokenpricealph`),
-          fetch(`https://api.coingecko.com/api/v3/simple/price?ids=alephium&vs_currencies=usd`),
+          fetch(`https://backend.mainnet.alephium.org/market/prices?currency=usd`,{method:"POST", body:JSON.stringify(['ALPH'])}),
         ]);
 
         // Check if both requests are successful
@@ -75,7 +75,7 @@ const TopBar: React.FC<myProps> = ({tokenID}) => {
 
     // Once isLoading becomes false, you can render the fetched data or handle other logic
 
-    const price = tokenAlphPrice * alphPrice['alephium']['usd'];
+    const price = tokenAlphPrice * alphPrice[0];
 
   return (
     <div className='grid grid-cols-8 h-full gap-4'>
@@ -88,7 +88,7 @@ const TopBar: React.FC<myProps> = ({tokenID}) => {
                     />
             </div>
             <div className='flex font-mono justify-start items-center uppercase text-5xl ml-5 col-span-5'>
-                <span>{tokenMetadata[0]?.name}</span>
+                <span>{tokenMetadata.name}</span>
             </div>
         </div>
         <div className='col-span-2 items-center justify-center flex'>
