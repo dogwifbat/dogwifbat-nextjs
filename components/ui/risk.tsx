@@ -95,10 +95,22 @@ const RiskAnalysis: React.FC<myProps> = ({tokenID}) => {
 
         const keysWith10Percent: Record<string, boolean> = {};
 
+        // Get circulating supply
+        let totalSupply = 0;
+        for(const key in tokenHolders) {
+          if(tokenHolders.hasOwnProperty(key)) {
+            totalSupply += parseInt(tokenHolders[key].item1, 10);
+          }
+        }
+
         for (const key in tokenHolders) {
           if (tokenHolders.hasOwnProperty(key)) {
             const item1Value = parseInt(tokenHolders[key].item1, 10);
-            const threshold = 0.1 * (Math.pow(maxSupply, decimals));
+            console.log("Math.pow(): ", Math.pow(totalSupply, decimals));
+            // const threshold = 0.1 * (Math.pow(totalSupply, decimals));
+            const threshold = 0.1 * totalSupply;
+
+            // console.log(`Item1: ${item1Value} , threshold: ${threshold}`);
             if (item1Value >= threshold) {
               keysWith10Percent[key] = true;
             }
@@ -145,6 +157,8 @@ const RiskAnalysis: React.FC<myProps> = ({tokenID}) => {
 
     risk += LpLocked ? 0 : 10;
 
+    console.log("Large Holders: ", LargeHolders);
+
 
   return (
     <>
@@ -154,6 +168,9 @@ const RiskAnalysis: React.FC<myProps> = ({tokenID}) => {
         <div className='text-5xl flex justify-center items-center border-solid border-2 border-green-500 h-20'>Good</div>
         :
         <div className='text-5xl flex justify-center items-center border-solid border-2 border-red-500 h-20'>Danger</div>
+      }
+      {
+
       }
     </>
   );

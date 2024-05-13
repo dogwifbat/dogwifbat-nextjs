@@ -4,6 +4,7 @@ import { button as buttonStyles } from "@nextui-org/theme";
 import { Button, Input } from "@nextui-org/react";
 import { subtitle, title } from "@/components/primitives";
 import { useRouter } from "next/navigation";
+import { addressFromContractId } from "@alephium/web3";
 
 interface token {
 	id: string;

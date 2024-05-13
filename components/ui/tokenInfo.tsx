@@ -9,10 +9,10 @@ interface myProps {
 
 const TokenInfo: React.FC<myProps> = ({tokenID}) => {
     const [tokenMetadata, setTokenMetadata] = useState<any>(null);
-    const [maxSupply, setMaxSupply] = useState<any>(null);
     const [tokenCreator, setTokenCreator] = useState<any>(null);
     const [tokenAlphPrice, setTokenAlphPrice] = useState<any>(null);
     const [alphPrice, setAlphPrice] = useState<any>(null);
+    const [holders, setHolders] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<Error | null>(null);
 
@@ -24,32 +24,32 @@ const TokenInfo: React.FC<myProps> = ({tokenID}) => {
     const fetchData = async () => {
       try {        
         // Perform requests simultaneously using Promise.all
-        const [tokenMetadataResponse, tokenSupplyResponse, tokenCreatorResponse, tokenAlphPriceResponse, alphPriceResponse] = await Promise.all([
+        const [tokenMetadataResponse, tokenCreatorResponse, tokenAlphPriceResponse, alphPriceResponse, holdersResponse] = await Promise.all([
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/metadata`),
-          fetch(`https://sniffer-backend.dogwifbat.org/tokens/${contractID}/maxsupply`),
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${contractID}/creator`),
           fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/tokenpricealph`),
           fetch(`https://backend.mainnet.alephium.org/market/prices?currency=usd`,{method:"POST", body:JSON.stringify(['ALPH'])}),
+          fetch(`https://sniffer-backend.dogwifbat.org/tokens/${tokenID}/holders`),
         ]);
 
         // Check if both requests are successful
-        if (!tokenMetadataResponse.ok || !tokenSupplyResponse.ok || !tokenCreatorResponse.ok || !tokenAlphPriceResponse.ok || !alphPriceResponse.ok) {
+        if (!tokenMetadataResponse.ok || !tokenCreatorResponse.ok || !tokenAlphPriceResponse.ok || !alphPriceResponse.ok || !holdersResponse.ok) {
           throw new Error('Failed to fetch data');
         }
 
         // Parse JSON responses
         const tokenMetadata = await tokenMetadataResponse.json();
-        const maxSupply = await tokenSupplyResponse.json();
         const creator = await tokenCreatorResponse.json();
         const tokenAlphPrice = await tokenAlphPriceResponse.json();
         const alphPrice = await alphPriceResponse.json();
+        const holders = await holdersResponse.json();
 
         // Once both requests are completed successfully, update state and set isLoading to false
         setTokenMetadata(tokenMetadata);
-        setMaxSupply(maxSupply);
         setTokenCreator(creator);
         setTokenAlphPrice(tokenAlphPrice);
         setAlphPrice(alphPrice);
+        setHolders(holders);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -90,13 +90,23 @@ const TokenInfo: React.FC<myProps> = ({tokenID}) => {
     // Get token decimals from metadata
     const decimals = tokenMetadata.decimals;
 
+
+    // Get circulating supply
+    let totalSupply = 0;
+    for(const key in holders) {
+      if(holders.hasOwnProperty(key)) {
+        totalSupply += parseInt(holders[key].item1, 10);
+      }
+    }
+
     // Format supply to be short supply format
-    const short_supply = decimals > 0 ? formatSupply(maxSupply / Math.pow(10, decimals)) : formatSupply(maxSupply);
+    const short_supply = decimals > 0 ? formatSupply(totalSupply / Math.pow(10, decimals)) : formatSupply(totalSupply);
+
 
     // Format creator address to be short format
     const short_creator = `${tokenCreator.slice(0, 4)}...${tokenCreator.slice(-4)}`;
 
-    const unformatted_mcap: string = (((tokenAlphPrice * alphPrice[0]) * maxSupply) / Math.pow(10, decimals)).toString();
+    const unformatted_mcap: string = (((tokenAlphPrice * alphPrice[0]) * totalSupply) / Math.pow(10, decimals)).toString();
     let mcap
     if (unformatted_mcap.indexOf('.') != -1) {
       mcap = new Intl.NumberFormat('en-US').format((parseInt(unformatted_mcap.slice(0, unformatted_mcap.indexOf('.')))));
