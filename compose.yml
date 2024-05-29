@@ -1,7 +1,7 @@
 services:
   wifb-server-beta:
     container_name: wifb_server_beta
-    image: dogwifbat-website-beta
+    image: dogwifbat-website
     build:
       context: ./
       target: production
@@ -11,7 +11,7 @@ services:
         - /app/node_modules
         - /app/.next
     ports:
-      - "3001:3000"
+      - "3000:3000"
 
     networks:
       - caddy_caddy-network
