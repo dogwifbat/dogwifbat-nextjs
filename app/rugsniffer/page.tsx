@@ -30,18 +30,8 @@ export default function Home() {
 
 	const [value, setValue] = React.useState("");
 	const [message, setMessage] = React.useState("");
-	const [pass, setPass] = React.useState("");
-	const [passmsg, setPassMsg] = React.useState("");
 
 	const handleSubmit = () => {
-		if(!pass) {
-			setPassMsg("Password is required.");
-			return;
-		}
-		if(pass != "wifbdevtest") {
-			setPassMsg("Wrong password.");
-			return;
-		}
 		if(!value) {
 			setMessage("This field is required");
 			return;
@@ -107,20 +97,7 @@ export default function Home() {
 					/>
 				</div>
 
-				<div className="justify-center py-4">
-					<Input 
-						type="password"
-						variant="bordered"
-						placeholder="Password"
-						size="lg"
-						value={pass}
-						onValueChange={setPass}
-						isRequired
-						isClearable
-						labelPlacement="inside"
-						label={passmsg}
-					/>
-				</div>
+
 
 				<div className="flex gap-3 justify-center py-8">
 					<Button

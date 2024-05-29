@@ -27,7 +27,8 @@ interface Holders {
 }
 
 const RiskAnalysis: React.FC<myProps> = ({tokenID}) => {
-    const [LpLocked, setLpLocked] = useState<any>(null);
+    const [TotalLp, setTotalLp] = useState<any>(null);
+    const [LockedLp, setLockedLP] = useState<any>(null);
     const [LargeHolders, setLargeHolders] = useState<any>(null);
     const [creator, setCreator] = useState<any>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -49,30 +50,38 @@ const RiskAnalysis: React.FC<myProps> = ({tokenID}) => {
 
         const object = lpPoolData.find((obj: LpPoolData) => obj.TokenA.name == "ALPH");
         const LpTokenID = object ? object.LpToken.id : undefined;
-        console.log("lpTokenID:", LpTokenID);
-        console.log("LpPoolData:", lpPoolData);
 
         const pool_address = addressFromContractId(LpTokenID);
 
-        const initialLPResponse = await fetch(`https://sniffer-backend.dogwifbat.org/pools/GetLpProvider/${pool_address}`);
-        if (!initialLPResponse.ok) {
-          throw new Error('Failed to fetch data');
-        }
+        const [initialLPResponse, LpHoldersResponse] = await Promise.all([
+                  fetch(`https://sniffer-backend.dogwifbat.org/pools/GetLpProvider/${pool_address}`),
+                  fetch(`https://sniffer-backend.dogwifbat.org/tokens/${LpTokenID}/holders`),
+                ]); 
+                if (!initialLPResponse.ok || !LpHoldersResponse.ok) {
+                    throw new Error('Failed to fetch data');
+                }
+                const initialLP = await initialLPResponse.json();
+                const lpHolders = await LpHoldersResponse.json();
 
-        const initialLP = await initialLPResponse.json();
-        const initialLpLockedResponse = await fetch(`https://sniffer-backend.dogwifbat.org/addresses/${initialLP}/tokens/${LpTokenID}/balance`)
-        if (!initialLpLockedResponse.ok) {
-          throw new Error('Failed to fetch data');
-        }
+                console.log("initla lp provider", initialLP);
 
-        const initialLpLockedData = await initialLpLockedResponse.json();
+                let totalLP = 0;
+                let lockedLP = 0;
 
-        // True if 100% of LP is locked, else false
-        console.log("balance:", initialLpLockedData.balance);
-        console.log("lockedBalance:", initialLpLockedData.lockedBalance);
-        console.log(initialLpLockedData);
+                // Iterate over each entry in the object
+                for (const key in lpHolders) {
+                    if (Object.prototype.hasOwnProperty.call(lpHolders, key)) {
+                        if(key !== pool_address) {
+                            const entry = lpHolders[key];
+                            // Add the value of item1 to totalLP
+                            totalLP += parseFloat(entry.item1);
+                            // Add the value of item2 to lockedLP
+                            lockedLP += parseFloat(entry.item2);
+                        }
+                    }
+                }
 
-        const LpLocked = (initialLpLockedData.balance > 0) && (initialLpLockedData.balance == initialLpLockedData.lockedBalance) ? true : false;
+
 
         const contractID = addressFromContractId(tokenID);
 
@@ -106,19 +115,16 @@ const RiskAnalysis: React.FC<myProps> = ({tokenID}) => {
         for (const key in tokenHolders) {
           if (tokenHolders.hasOwnProperty(key)) {
             const item1Value = parseInt(tokenHolders[key].item1, 10);
-            console.log("Math.pow(): ", Math.pow(totalSupply, decimals));
-            // const threshold = 0.1 * (Math.pow(totalSupply, decimals));
             const threshold = 0.1 * totalSupply;
 
-            // console.log(`Item1: ${item1Value} , threshold: ${threshold}`);
             if (item1Value >= threshold) {
               keysWith10Percent[key] = true;
             }
           }
         }
 
-        
-        setLpLocked(LpLocked);
+        setTotalLp(totalLP);
+        setLockedLP(lockedLP);
         setLargeHolders(keysWith10Percent);
         setCreator(creator);
         setIsLoading(false);
@@ -153,11 +159,16 @@ const RiskAnalysis: React.FC<myProps> = ({tokenID}) => {
     // Once isLoading becomes false, you can render the fetched data or handle other logic
 
     let risk: number = 0;
-    console.log(LpLocked);
+    let lockedPercentage = (LockedLp / TotalLp) * 100
 
-    risk += LpLocked ? 0 : 10;
+    console.log("lock %%", lockedPercentage);
 
-    console.log("Large Holders: ", LargeHolders);
+    if ( lockedPercentage < 50) {
+      risk += 10;
+    }
+
+    // Add points if there are large holders with more than 10% of the supply
+    //risk += Object.keys(LargeHolders).length > 0 ? 10 : 0;
 
 
   return (

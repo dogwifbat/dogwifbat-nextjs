@@ -25,7 +25,7 @@ interface LpPoolData {
     poolAddress: string;
     initialLP: string;
     lpHolders: Holders;
-    liquidity: number;
+    liquidity: string;
     totalLP: number,
     lockedLP: number,
 }
@@ -63,26 +63,24 @@ const Liquidity_Pools: React.FC<myProps> = ({tokenID}) => {
                 }
                 const liquidity_info = await liquidityResponse.json();
 
+                console.log("LP info", liquidity_info)
+
                 if(liquidity_info.poolType == 'token') {
                     // Pool type is Token/Token
-                    const tokenPriceAlphResponse = await fetch(`https://sniffer-backend.dogwifbat.org/tokens/${liquidity_info.tokenA.tokenId}/tokenpricealph`);
-                    if (!tokenPriceAlphResponse.ok) {
-                        throw new Error('Failed to fetch data');
-                    }
-                    const tokenAlphPrice = await tokenPriceAlphResponse.json();
-                    const tokenBalance = liquidity_info.tokenA.adjustedBalance;
+                    //const tokenPriceAlphResponse = await fetch(`https://sniffer-backend.dogwifbat.org/tokens/${liquidity_info.tokenA.tokenId}/tokenpricealph`);
+                    //if (!tokenPriceAlphResponse.ok) {
+                       // throw new Error('Failed to fetch data');
+                    //}
+                    //const tokenAlphPrice = await tokenPriceAlphResponse.json();
+                    //const tokenBalance = liquidity_info.tokenA.adjustedBalance;
 
-                    liquidity = ((tokenAlphPrice * tokenBalance) * alphUsdPrice[0]).toString();
+                    liquidity = "N/A"
                 } else {
                     // Pool type is ALPH/Token
-                    liquidity = (liquidity_info.alphBalance * alphUsdPrice[0]).toString();
-                };
+                    const liquidityValue = liquidity_info.alphBalance * alphUsdPrice[0];
+                    liquidity = "$" + (new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(liquidityValue));
 
-                if (liquidity.toString().indexOf('.') != -1) {
-                    liquidity = new Intl.NumberFormat('en-US').format((parseInt(liquidity.slice(0, liquidity.indexOf('.')))));
-                } else {
-                    liquidity = new Intl.NumberFormat('en-US').format(parseInt(liquidity));
-                }
+                };
 
                 const [initialLPResponse, LpHoldersResponse] = await Promise.all([
                   fetch(`https://sniffer-backend.dogwifbat.org/pools/GetLpProvider/${pool_address}`),
@@ -120,6 +118,20 @@ const Liquidity_Pools: React.FC<myProps> = ({tokenID}) => {
                     lockedLP: lockedLP,
                 };
             }));
+
+            // Assuming updatedPoolData is an array of LpPoolData objects
+updatedPoolData.sort((a, b) => {
+    // Regular expression to remove all non-digit and non-decimal point characters
+    const regex = /[^\d.-]/g;
+
+    // Extract and parse the numeric value from the liquidity string, handle "N/A" as -Infinity
+    const valueA = a.liquidity === "N/A" ? -Infinity : parseFloat(a.liquidity.replace(regex, ''));
+    const valueB = b.liquidity === "N/A" ? -Infinity : parseFloat(b.liquidity.replace(regex, ''));
+
+    // Descending order sort: larger values at the top, "N/A" at the bottom
+    return valueB - valueA;
+});
+
 
             // Set the updated pool data
             setLpPoolData(updatedPoolData);
@@ -184,7 +196,7 @@ const Liquidity_Pools: React.FC<myProps> = ({tokenID}) => {
             </span>
         </div>
         <div className='grid'>
-            <div>${pool.liquidity}</div>
+            <div>{pool.liquidity}</div>
         </div>
         <div className='grid'>
             <div>

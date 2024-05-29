@@ -60,16 +60,23 @@ export default function StatsPage() {
 
 			<div className='grid grid-cols-1 lg:grid-cols-3 gap-8 py-4'>
 
-				<div className='grid grid-cols-6 lg:col-span-2 font-mono p-2 text-2xl border-solid border-2 border-white-500 h-60'>
-					<div className='col-span-6 text-3xl'><h1>Liquidity pools</h1></div>
-					<div className="col-span-1 text-2xl">Address</div>
-					<div className="col-span-1 text-2xl">Pair</div>
-					<div className="col-span-1 text-2xl">Initial LP</div>
-					<div className="col-span-1 text-2xl">LP Holders</div>
-					<div className="col-span-1 text-2xl">Liquidity</div>
-					<div className="col-span-1 text-2xl">LP Locked</div>
+				<div className='lg:col-span-2 font-mono p-2 text-2xl border-solid border-2 border-white-500 h-60'>
 
-					<Liquidity_Pools tokenID={tokenID} />
+					<div className="grid grid-cols-6">
+						<div className='col-span-6 text-3xl'><h1>Liquidity pools</h1></div>
+						<div className="col-span-1 text-2xl">Address</div>
+						<div className="col-span-1 text-2xl">Pair</div>
+						<div className="col-span-1 text-2xl">Initial LP</div>
+						<div className="col-span-1 text-2xl">LP Holders</div>
+						<div className="col-span-1 text-2xl">Liquidity</div>
+						<div className="col-span-1 text-2xl">LP Locked</div>
+					</div>
+					
+
+					<div className="grid grid-cols-6 overflow-y-auto h-32">
+						<Liquidity_Pools tokenID={tokenID} />
+					</div>
+					
 				</div>
 
 				<div className='grid grid-col-2 col-span-1 gap-4 p-4 font-mono text-2xl border-solid border-2 border-white-500 h-60'>
