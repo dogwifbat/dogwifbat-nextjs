@@ -3,10 +3,10 @@ import React from 'react';
 import PieChart from '@/components/piechart';
 import Link from 'next/link';
 
-export default function About() {
+export default function tokenomics() {
   return (
     <div className="flex items-center justify-center">
-      <div className=" shadow-xl rounded-lg p-8 max-w-4xl mx-auto text-center">
+      <div className=" shadow-xl rounded-lg max-w-4xl mx-auto text-center">
         <h1 className="text-4xl font-bold mb-4">About $WIFB</h1>
         <p className="text-xl font-bold  mb-6">
           dogwifbat is a dog wif a bat. Pretty obvious right? Well it's also more than that...
