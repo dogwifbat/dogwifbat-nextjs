@@ -78,7 +78,7 @@ export default function Home() {
 					Check Alephium token statistics.
 				</h1>
 				<h2 className={subtitle({ class: "mt-4" })}>
-					Don't be a victim of another rugpull, DYOR.
+					Don&apos;t be a victim of another rugpull, DYOR.
 				</h2>
 			</div>
 			<form className="inline-block w-4/5 justify-center">

@@ -112,23 +112,25 @@ const TopHolders: React.FC<myProps> = ({tokenID}) => {
     const top5 = dataArray.slice(0, 5);
 
   return (
-    top5.map((holder: any) => (
-        <div className='grid grid-cols-6'>
-            <div className='col-span-2'>
-                <Tooltip color='default' content={holder.key}>
-                    <Link className='underline text-xl' color='foreground' isExternal href={`https://explorer.alephium.org/addresses/${holder.key}`}>
-                        {poolAddresses.some((addr: any) => addr === holder.key) ? `Ayin AMM` : `${holder.key.slice(0, 4)}...${holder.key.slice(-4)}`}
-                    </Link>
-                </Tooltip>
-            </div>
-            <div className='col-span-2'>
-                {decimals > 0 ? formatSupply((holder.item1) / Math.pow(10, decimals)) : formatSupply(holder.item1)}
-            </div>
-            <div className='col-span-2'>
-                {((holder.item1 / maxSupply) * 100).toFixed(2)}%
-            </div>
+    <div>
+      {top5.map((holder: any) => (
+        <div className='grid grid-cols-6' key={holder.key}>
+          <div className='col-span-2'>
+            <Tooltip color='default' content={holder.key}>
+              <Link className='underline text-xl' color='foreground' isExternal href={`https://explorer.alephium.org/addresses/${holder.key}`}>
+                {poolAddresses.some((addr: any) => addr === holder.key) ? `Ayin AMM` : `${holder.key.slice(0, 4)}...${holder.key.slice(-4)}`}
+              </Link>
+            </Tooltip>
+          </div>
+          <div className='col-span-2'>
+            {decimals > 0 ? formatSupply((holder.item1) / Math.pow(10, decimals)) : formatSupply(holder.item1)}
+          </div>
+          <div className='col-span-2'>
+            {((holder.item1 / maxSupply) * 100).toFixed(2)}%
+          </div>
         </div>
-    ))
+      ))}
+    </div>
   );
 }
 
